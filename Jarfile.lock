@@ -5,6 +5,7 @@
 - commons-cli:commons-cli:jar:1.4
 - org.bouncycastle:bcprov-jdk15on:jar:1.56
 - org.locationtech.jts:jts-core:jar:1.15.0
+- org.yaml:snakeyaml:jar:1.14
 - org.slf4j:slf4j-simple:jar:1.7.25
 - org.bouncycastle:bcmail-jdk15on:jar:1.56
 - org.bouncycastle:bcpkix-jdk15on:jar:1.56
