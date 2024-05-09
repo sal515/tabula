@@ -4,7 +4,8 @@ require 'fileutils'
 module TabulaSettings
 
   ########## Defaults ##########
-  DEFAULT_DEBUG = false
+  # TODO FIXME default debug should be false
+  DEFAULT_DEBUG = true
 
   ########## Helpers ##########
   def self.getDataDir
