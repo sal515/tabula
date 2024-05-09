@@ -29,7 +29,7 @@ Tabula.SavedTemplateView = Backbone.View.extend({
     'click .delete-template': 'deleteTemplate',
     'click .download-template': 'downloadTemplate',
     'click .edit-template-name': 'editTemplateName',
-    'click .save-template-name': 'renameTemplate'
+    // 'click .save-template-name': 'renameTemplate'
   },
   template: _.template( $('#saved-template-library-item-template').html().replace(/nestedscript/g, 'script')),
   initialize: function(){
@@ -44,6 +44,7 @@ Tabula.SavedTemplateView = Backbone.View.extend({
   editTemplateName: function(e) {
     var name_el = this.$el.find(".template-name");
     $(name_el).replaceWith($('<input type="text" value="'+this.model.get('name')+'">'));
+    // TODO FIXME NEED? 
     $(e.currentTarget).replaceWith($("<a href=\"javascript:\"><span class=\"glyphicon glyphicon-floppy-disk save-template-name\"></span></a>"));
   },
   renameTemplate: function(e){

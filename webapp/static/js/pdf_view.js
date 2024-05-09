@@ -830,16 +830,17 @@ Tabula.ControlPanelView = Backbone.View.extend({ // only one
     'click #restore-detected-tables': 'restoreDetectedTables',
     'click #all-data': 'queryAllData',
     'click #repeat-lassos': 'repeatLassos',
-    'click #save-template': 'saveTemplate',
+    // 'click #save-template': 'saveTemplate',
   },
 
   template: _.template($('#templates #select-control-panel-template').html().replace(/nestedscript/g, 'script')),
   initialize: function(stuff){
     this.pdf_view = stuff.pdf_view;
     this.saved_template_collection = stuff.saved_template_collection;
-    _.bindAll(this, 'queryAllData', 'render', 'saveTemplate');
+    _.bindAll(this, 'queryAllData', 'render');
+    // _.bindAll(this, 'saveTemplate');
     this.listenTo(this.pdf_view.pdf_document, 'sync', this.render );
-    this.saved_template_library_view = new Tabula.SavedTemplateLibraryView({collection: this.saved_template_collection})
+    // this.saved_template_library_view = new Tabula.SavedTemplateLibraryView({collection: this.saved_template_collection})
   },
 
   /* in case there's a PDF with a complex format that's repeated on multiple pages */
@@ -858,21 +859,21 @@ Tabula.ControlPanelView = Backbone.View.extend({ // only one
     // ugh
   },
 
-  saveTemplate: function(e){
-    $btn = $(e.currentTarget);
-    $btnText = $btn.find(".button-text");
-    var oldButtonText = $btnText.text();
-    $btn.attr("disabled", "disabled");
-    $btnText.text("Saving...");
-    this.pdf_view.saveTemplate(function(){ 
-      $btnText.text("Saved!");
-      window.setTimeout( function(){
-        $btn.removeAttr("disabled");
-        $btn.removeProp("disabled");
-        $btnText.text(oldButtonText);
-      }, 2000);
-    });
-  },
+  // saveTemplate: function(e){
+  //   $btn = $(e.currentTarget);
+  //   $btnText = $btn.find(".button-text");
+  //   var oldButtonText = $btnText.text();
+  //   $btn.attr("disabled", "disabled");
+  //   $btnText.text("Saving...");
+  //   this.pdf_view.saveTemplate(function(){ 
+  //     $btnText.text("Saved!");
+  //     window.setTimeout( function(){
+  //       $btn.removeAttr("disabled");
+  //       $btn.removeProp("disabled");
+  //       $btnText.text(oldButtonText);
+  //     }, 2000);
+  //   });
+  // },
 
   restoreDetectedTables: function(){
     var autodetected_selections = this.pdf_view.pdf_document.autodetected_selections.models.map(function(sel){
@@ -917,7 +918,7 @@ Tabula.ControlPanelView = Backbone.View.extend({ // only one
 
                   })));
     
-    this.$el.find("#template-dropdown-templates-list-container").html(this.saved_template_library_view.render().el);
+    // this.$el.find("#template-dropdown-templates-list-container").html(this.saved_template_library_view.render().el);
 
     return this;
   },
@@ -1140,8 +1141,8 @@ Tabula.PDFView = Backbone.View.extend(
 
     initialize: function(){
       _.bindAll(this, 'render', 'addOne', 'addAll', 'totalSelections', 'renderSelection',
-        'createDataView', 'checkForAutodetectedTables', 'getData', 'handleScroll',
-        'loadSavedTemplate', 'saveTemplate', 'saveTemplateAs');
+        'createDataView', 'checkForAutodetectedTables', 'getData', 'handleScroll');
+      // _.bindAll(this, 'loadSavedTemplate', 'saveTemplate', 'saveTemplateAs');
 
       this.pdf_document = new Tabula.Document({
         pdf_id: PDF_ID,
@@ -1369,25 +1370,25 @@ Tabula.PDFView = Backbone.View.extend(
       }, this)});
     },
 
-    saveTemplate: function (cb) {
-      var name = (this.loadedSavedState && this.loadedSavedState.name) || (this.pdf_document.attributes.original_filename).replace(".pdf", "")
-      console.log(this.pdf_document.attributes);
-      this.saveTemplateAs(null, name, cb)
-    },
+    // saveTemplate: function (cb) {
+    //   var name = (this.loadedSavedState && this.loadedSavedState.name) || (this.pdf_document.attributes.original_filename).replace(".pdf", "")
+    //   console.log(this.pdf_document.attributes);
+    //   this.saveTemplateAs(null, name, cb)
+    // },
 
-    saveTemplateAs: function(id, name, cb){
-      var list_of_coords = Tabula.pdf_view.pdf_document.selections.invoke("toCoords");
-      // {"name": "fake test template", "selection_count": 0, "page_count": 0, "time": "1499535056", "id": "asdfasdf"}
-      var templateMetadata = {
-        name: name,
-        selection_count: list_of_coords.length,
-        page_count: _(_(list_of_coords).map(function(obj){ return obj["page"] })).uniq().length,
-        time: Math.floor(Date.now() / 1000),
-        template: _(list_of_coords).map(function(obj){ return _.omit(obj, 'selection_id') })
-      };
-      var saved_template = new Tabula.SavedTemplate(templateMetadata);
-      saved_template.save(null,{success: cb, error: cb});
-    },
+    // saveTemplateAs: function(id, name, cb){
+    //   var list_of_coords = Tabula.pdf_view.pdf_document.selections.invoke("toCoords");
+    //   // {"name": "fake test template", "selection_count": 0, "page_count": 0, "time": "1499535056", "id": "asdfasdf"}
+    //   var templateMetadata = {
+    //     name: name,
+    //     selection_count: list_of_coords.length,
+    //     page_count: _(_(list_of_coords).map(function(obj){ return obj["page"] })).uniq().length,
+    //     time: Math.floor(Date.now() / 1000),
+    //     template: _(list_of_coords).map(function(obj){ return _.omit(obj, 'selection_id') })
+    //   };
+    //   var saved_template = new Tabula.SavedTemplate(templateMetadata);
+    //   saved_template.save(null,{success: cb, error: cb});
+    // },
 
     render : function(){
       document.title="Select Tables | Tabula";
@@ -1441,21 +1442,21 @@ Tabula.SavedTemplateView = Backbone.View.extend({
     Tabula.pdf_view.loadSavedTemplate(this.model); // TODO: make this not a reference to global Tabula.pdf_view
   }
 });
-Tabula.SavedTemplateLibraryView = Backbone.View.extend({
-  tagName: 'ul',
-  initialize: function(stuff){
-    _.bindAll(this, 'render');
-    this.listenTo(this.collection, 'change', this.render);
-  },
-  render: function(){
-    this.$el.empty();
-    this.collection.each(_.bind(function(saved_template_model){
-      var template_view = new Tabula.SavedTemplateView({model: saved_template_model, collection: this.collection});
-      this.$el.append(template_view.render().el);
-    }, this));
-    return this;
-  }
-});
+// Tabula.SavedTemplateLibraryView = Backbone.View.extend({
+//   tagName: 'ul',
+//   initialize: function(stuff){
+//     _.bindAll(this, 'render');
+//     this.listenTo(this.collection, 'change', this.render);
+//   },
+//   render: function(){
+//     this.$el.empty();
+//     this.collection.each(_.bind(function(saved_template_model){
+//       var template_view = new Tabula.SavedTemplateView({model: saved_template_model, collection: this.collection});
+//       this.$el.append(template_view.render().el);
+//     }, this));
+//     return this;
+//   }
+// });
 
 
 
