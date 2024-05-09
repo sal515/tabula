@@ -20,6 +20,8 @@ begin
   require_relative './tabula_version.rb'
 rescue LoadError
   $TABULA_VERSION = "rev#{`git rev-list --max-count=1 HEAD`.strip}"
+  # todo fixme - debug printing the tabula version
+  puts "Tabula version: #{$TABULA_VERSION}"
 end
 
 require_relative '../lib/tabula_workspace.rb'
@@ -36,17 +38,25 @@ end
 
 STATIC_ROOT = if defined?($servlet_context)
                 File.join($servlet_context.getRealPath('/'), 'WEB-INF/webapp/static')
+                # todo fixme print servlet_context realpath
+                puts "servlet_context.getRealPath('/'): #{$servlet_context.getRealPath('/')}"
               else
+
                 File.join(File.dirname(__FILE__), 'static')
               end
+# todo fixme - debug printing the static root
+puts "STATIC_ROOT: #{STATIC_ROOT}"
 
 Cuba.plugin Cuba::Render
 Cuba.settings[:render].store(:views, File.expand_path("views", File.dirname(__FILE__)))
+# Allows the usage of DELETE and PUT methods
 Cuba.use Rack::MethodOverride
+# Serve static files from the public directory
 Cuba.use Rack::Static, root: STATIC_ROOT, urls: ["/css","/js", "/img", "/swf", "/fonts"]
+# Add content length in response automatically based on response body
 Cuba.use Rack::ContentLength
+# Reload the browser automatically whenever files change
 Cuba.use Rack::Reloader
-
 
 def upload(file)
   original_filename = file[:filename]
@@ -117,6 +127,7 @@ Cuba.define do
   if TabulaSettings::ENABLE_DEBUG_METHODS
     require_relative './tabula_debug.rb'
     on 'debug' do
+      puts("Running TabulaDebug")
       run TabulaDebug
     end
   end
@@ -177,6 +188,8 @@ Cuba.define do
       end
       res.status = 200
       res['Content-Type'] = 'application/json'
+
+
       res.write(JSON.dump({template_ids: template_ids}))
     end
 
@@ -260,7 +273,12 @@ Cuba.define do
       res.write Tabula::Workspace.instance.get_document_metadata(file_id).to_json
     end
 
-    [root, "about", "pdf/:file_id", "help", "mytemplates"].each do |paths_to_single_page_app|
+    on "helloworld" do
+      res.write "Hello, world!"
+    end
+
+    # HTTP Request routes set by Ruby Cuba framework 
+    [root, "pdf/:file_id"].each do |paths_to_single_page_app|
       on paths_to_single_page_app do
         index = File.read("webapp/index.html")
         if ROOT_URI != ''
@@ -275,7 +293,6 @@ Cuba.define do
   on post do
     on 'upload.json' do
       # Make sure this is a PDF, before doing anything
-
       if req.params['file'] # single upload mode. this should be deleting once if decide to enable multiple upload for realzies
         job_batch, file_id = *upload(req.params['file'])
         unless is_valid_pdf?(req.params['file'][:tempfile].path)

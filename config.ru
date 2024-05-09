@@ -23,8 +23,11 @@ end
 
 puts "running under #{ROOT_URI} as root URI" 
 
-
-map ROOT_URI do 
+# When a request comes in for the ROOT_URI path, it will be handled by the Cuba application.
+map ROOT_URI do
+  # todo fixme print root uri
+  puts("Root URI: #{ROOT_URI}")
+  puts("Running Cuba framework app...") 
   run Cuba
 end
 
@@ -32,6 +35,8 @@ if "#{$PROGRAM_NAME}".include?("tabula.jar")
   # only do this if running as jar or app. (if "rackup", we don't
   # actually use 8080 by default.)
 
+  puts("running as tabula.jar, opening browser...")
+  
   require 'java'
 
   # don't do "java_import java.net.URI" -- it conflicts with Ruby URI and
@@ -94,4 +99,6 @@ if "#{$PROGRAM_NAME}".include?("tabula.jar")
     puts "return to this window and press \"Control-C\" to close it."
     puts "======================================================\n\n"
   end
+else
+  puts("Not running as tabula.jar, not opening browser...")
 end
