@@ -20,39 +20,43 @@ var TabulaRouter = Backbone.Router.extend({
     "pdf/:file_id/extract":        "view", // you have to make selections first, so going directly to /extract doesn't work.
     "queue/:file_id":              'status',
     "error":                       'uploadError',
-    "help":                        'help',
+    // "help":                        'help',
     "about":                       'about',
-    "mytemplates":                 'templates'
+    // "mytemplates":                 'templates',
+    "*path":                       'upload'
   },
 
-  help: function(){
-    document.title="Help | Tabula";
-    $('nav li a').removeClass('active'); $('nav #help-nav').addClass('active');
-    $('#tabula-app').html( _.template( $('#help-template').html().replace(/nestedscript/g, 'script') )({ }) );
-  },
 
-  about: function(){
-    document.title="About | Tabula";
-    $('nav li a').removeClass('active'); $('nav #about-nav').addClass('active');
-    $('#tabula-app').html( _.template( $('#about-template').html().replace(/nestedscript/g, 'script') )({ }) );
-  },
+  // help: function(){
+  //   document.title="Help | Tabula";
+  //   $('nav li a').removeClass('active'); $('nav #help-nav').addClass('active');
+  //   $('#tabula-app').html( _.template( $('#help-template').html().replace(/nestedscript/g, 'script') )({ }) );
+  // },
 
-  templates: function(){
-    document.title="Templates | Tabula";
-    $('nav li a').removeClass('active'); $('nav #templates-nav').addClass('active');
-    $('#tabula-app').html( _.template( $('#templates-template').html().replace(/nestedscript/g, 'script') )({ }) );
-    $.ajax({
-      url: (base_uri || '/') + "js/template_library.js",
-      dataType: "script",
-      async: true,
-      success: function(data, status, jqxhr){
-        Tabula.library = new Tabula.TemplateLibrary({el: $('#tabula-app')[0]}).render();
-      },
-      error: function(a,b,c){
-        console.log(a,b,c);
-      }
-    });
-  },
+  // about: function(){
+  //   console.log("about page was removed")
+  //   // document.title="About | Tabula";
+  //   // $('nav li a').removeClass('active'); $('nav #about-nav').addClass('active');
+  //   // $('#tabula-app').html( _.template( $('#about-template').html().replace(/nestedscript/g, 'script') )({ }) );
+  // },
+
+  // templates: function(){
+  //   console.log("templates page was removed")
+  //   document.title="Templates | Tabula";
+  //   $('nav li a').removeClass('active'); $('nav #templates-nav').addClass('active');
+  //   $('#tabula-app').html( _.template( $('#templates-template').html().replace(/nestedscript/g, 'script') )({ }) );
+  //   $.ajax({
+  //     url: (base_uri || '/') + "js/template_library.js",
+  //     dataType: "script",
+  //     async: true,
+  //     success: function(data, status, jqxhr){
+  //       Tabula.library = new Tabula.TemplateLibrary({el: $('#tabula-app')[0]}).render();
+  //     },
+  //     error: function(a,b,c){
+  //       console.log(a,b,c);
+  //     }
+  //   });
+  // },
 
   upload: function() { // library page.
     document.title="Import | Tabula";
@@ -92,99 +96,129 @@ var TabulaRouter = Backbone.Router.extend({
 });
 
 
-Tabula.getVersion = function(){
-  Tabula.notification = new Backbone.Model({});
-  Tabula.new_version = new Backbone.Model({});
-  $.getJSON((base_uri || '/') + "version", function(data){
-    Tabula.api_version = data["api"];
-    Tabula.getNotifications();
+// Tabula.getSettings = function(){
+//   console.log("settings check")
+//   // Tabula.notification = new Backbone.Model({});
+//   // Tabula.new_version = new Backbone.Model({});
 
-    // if(Tabula.api_version.slice(0,3) == "rev"){
-    //   $('#dev-mode-ribbon').show();
-    // }
+//   // $.getJSON((base_uri || '/') + "settings", function(data){
 
-  })
-}
-Tabula.getNotifications = function(){
-  if(localStorage.getItem("tabula-notifications") === false) return;
-  $.get('https://api.github.com/repos/tabulapdf/tabula/releases',
-      function(data) {
-        if (data.length < 1) return;
-        if (Tabula.api_version.indexOf('rev') == 0) return;
+//   //   console.log("settings", data);
 
-        var prerelease = (Tabula.UI_VERSION.indexOf("-pre") !== -1);
-        if (prerelease) {console.log("Is prerelease");}
+//   //   // there are two ways to turn off notifications: 
+//   //   // 1. in settings.rb (which is set via command-line options) and in which you can turn off one
+//   //   //    but not the other.
+//   //   // 2. in localStorage.
 
-        // check if new version
-        var non_prerelease_i = 0;
-        for (var i=0; i<data.length; i++) {
-          var d = data[i];
-          if (!!d.draft) { continue; } // ignore drafts
-          if (!prerelease && !!d.prerelease) { continue; } // ignore prereleases unless we're on a prerelease
+//   //   // on first usage, we do nothing. once you've seen the opt-out banner,
+//   //   // we continue to show it, but fetch notifications.
 
-          var rel_ver_re = /\((\d+\.\d+\.\d+\.\d+)\)/;
-          console.log("checking " + d.name + " vs " + Tabula.api_version);
+//   //   getNotifications = function(){
+//   //     if(data["disable_version_check"] === false) {
+//   //       Tabula.getLatestReleaseVersion();
+//   //     }
+//   //     if(data["disable_notifications"] === false) {
+//   //       Tabula.getNotifications();
+//   //     }
+//   //   }
 
-          // Either the name of the GitHub release is the the version or the
-          // name of the GitHub release contains the full 4-part "build id"
-          // in parenthesis.
-          //   * "1.1.0"
-          //   * "Tabula 1.1.0 Release (1.1.0.16091701)" (YYMMDDxx, with xx as a day-based serial number in case we need it)
-          if ((non_prerelease_i === 0) && (
-            (d.name == Tabula.api_version) ||
-            (!!d.name.match(rel_ver_re) && (d.name.match(rel_ver_re)[1] === Tabula.api_version))
-          )) {
-            // if index == 0, current release is the newest, so break out of this fn
-            console.log(" -> IS LATEST");
-            return;
-          } else {
-            // keep iterating, maybe we'll find this version later in list
-            non_prerelease_i += 1;
-          }
-        }
+//   //   var notificationsDialogSeen = localStorage.getItem("tabula-notifications-dialog-seen");
+//   //   var acceptsNotifications = localStorage.getItem("tabula-notifications");
 
-        // We're not the latest release, grab data from GitHub & tell user
-        var new_release = data[0];
-        if(new_release){
-          Tabula.new_version.set(new_release);
-        }
-      }
-  );
-  $.ajax({
-    url: 'http://tabula.jeremybmerrill.com/tabula/notifications.jsonp',
-    dataType: "jsonp",
-    jsonpCallback: 'notifications',
-    success: function(data){
-      if(data.length < 1) return;
+//   //   console.log("notificationsDialogSeen", notificationsDialogSeen);
+//   //   console.log("acceptsNotifications", acceptsNotifications);
 
-      // find the first listed notification where today is between its `live_date` and `expires_date`
-      // and within the `versions` list.
-      // we might use this for, say, notifying users if a version urgently needs an update or something
-      //
-      var notifications = $.grep(data, function(d){
-        var today = new Date();
-        if ( (d.expires_date && (new Date(d.expires_date) < today)) || (d.live_date && (new Date(d.live_date) > today)) ){
-          return false;
-        }
-        if( d.versions && d.versions.length > 0){
-          return (d.versions.indexOf(Tabula.api_version) > -1);
-        }else{
-          return true;
-        }
-      });
+//   //   if (acceptsNotifications == "true"){
+//   //     getNotifications();
+//   //   }else if (acceptsNotifications == "false"){
+//   //    // do nothing.
+//   //   }else{ // null or unset
+//   //     if (notificationsDialogSeen){
+//   //       getNotifications();
+//   //     }else{
+//   //       localStorage.setItem("tabula-notifications-dialog-seen", true);
+//   //     }
+//   //     $('#tabula-app').after( _.template( $('#notifications-approval-template').html().replace(/nestedscript/g, 'script') )({ }) );
+//   //     $('#notifications-approval-clicky #notifications-approval-close, #notifications-approval-clicky #notifications-approval-okay').on("click", function(){
+//   //       localStorage.setItem("tabula-notifications-dialog-seen", true);
+//   //       localStorage.setItem("tabula-notifications", true);
+//   //       $('#notifications-approval-clicky').hide();
+//   //     })
+//   //     $('#notifications-approval-clicky #notifications-approval-opt-out').on("click", function(){
+//   //       localStorage.setItem("tabula-notifications-dialog-seen", true);
+//   //       localStorage.setItem("tabula-notifications", false);
+//   //       $('#notifications-approval-clicky').hide();
+//   //     })
+//   //   }
+//   //   Tabula.api_version = data["api_version"];
+//   //   if(Tabula.api_version.slice(0,3) == "rev"){
+//   //     // $('#dev-mode-ribbon').show();
+//   //     console.log("This is a development version of Tabula!")
+//   //   }
 
-      if(notifications.length >= 1){
-        console.log(notifications.length + " matching notifications:", notifications);
-        Tabula.notification.set(notifications[0]);
-      }else{
-        console.log("no notifications")
-      }
-    }});
-}
+//   // })
+// }
 
+
+// Tabula.getLatestReleaseVersion = function(){
+//   console.log("Disabled latest release check")
+//   $.get('https://api.github.com/repos/tabulapdf/tabula/releases',
+//       function(data) {
+//         if (data.length < 1) return;
+//         if (Tabula.api_version.indexOf('rev') == 0) return;
+
+//         var prerelease = (Tabula.UI_VERSION.indexOf("-pre") !== -1);
+//         if (prerelease) {console.log("Is prerelease");}
+
+//         // check if new version
+//         var non_prerelease_i = 0;
+//         for (var i=0; i<data.length; i++) {
+//           var d = data[i];
+//           if (!!d.draft) { continue; } // ignore drafts
+//           if (!prerelease && !!d.prerelease) { continue; } // ignore prereleases unless we're on a prerelease
+
+//           var rel_ver_re = /\((\d+\.\d+\.\d+\.\d+)\)/;
+//           console.log("checking " + d.name + " vs " + Tabula.api_version);
+
+//           // Either the name of the GitHub release is the the version or the
+//           // name of the GitHub release contains the full 4-part "build id"
+//           // in parenthesis.
+//           //   * "1.1.0"
+//           //   * "Tabula 1.1.0 Release (1.1.0.16091701)" (YYMMDDxx, with xx as a day-based serial number in case we need it)
+//           if ((non_prerelease_i === 0) && (
+//             (d.name == Tabula.api_version) ||
+//             (!!d.name.match(rel_ver_re) && (d.name.match(rel_ver_re)[1] === Tabula.api_version))
+//           )) {
+//             // if index == 0, current release is the newest, so break out of this fn
+//             console.log(" -> IS LATEST");
+//             return;
+//           } else {
+//             // keep iterating, maybe we'll find this version later in list
+//             non_prerelease_i += 1;
+//           }
+//         }
+
+//         // We're not the latest release, grab data from GitHub & tell user
+//         var new_release = data[0];
+//         if(new_release){
+//           Tabula.new_version.set(new_release);
+//         }
+//       }
+//   );
+// };
+
+
+// Tabula.getNotifications = function(){
+//   console.log("Disabled notifications check")
+//   $.ajax({
+//     url: 'http://tabula.jeremybmerrill.com/tabula/notifications.jsonp',
+//     dataType: "jsonp",
+//     jsonpCallback: 'notifications',
+//     success: function(data){
+//       if(data.length < 1) return;
 
 $(function(){
-  Tabula.getVersion();
+  console.log("Disabled settings check")
   window.tabula_router = new TabulaRouter();
   Backbone.history.start({
     pushState: true,
