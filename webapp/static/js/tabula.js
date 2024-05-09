@@ -21,7 +21,7 @@ var TabulaRouter = Backbone.Router.extend({
     "queue/:file_id":              'status',
     "error":                       'uploadError',
     // "help":                        'help',
-    "about":                       'about',
+    // "about":                       'about',
     // "mytemplates":                 'templates',
     "*path":                       'upload'
   },
