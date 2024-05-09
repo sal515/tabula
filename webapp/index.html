@@ -44,10 +44,10 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-left">
             <li><a id="upload-nav" href="">My Files</a></li>
-            <li><a id="templates-nav" href="mytemplates">My Templates</a></li>
-            <li><a id="about-nav" href="about">About</a></li>
-            <li><a id="help-nav" href="help">Help</a></li>
-            <li><a href="https://github.com/tabulapdf/tabula" target="_blank">Source Code</a></li>
+            <!-- <li><a id="templates-nav" href="mytemplates">My Templates</a></li> -->
+            <!-- <li><a id="about-nav" href="about">About</a></li> -->
+            <!-- <li><a id="help-nav" href="help">Help</a></li> -->
+            <!-- <li><a href="https://github.com/tabulapdf/tabula" target="_blank">Source Code</a></li> -->
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a target="_blank" href="https://opencollective.com/tabulapdf">Support Tabula on OpenCollective!</a></li>
@@ -151,9 +151,9 @@
       </script>
 
       <script type="text/template" id="export-page-sidebar-template">
-          <h4>Is the extracted data incorrect?</h4>
+          <!-- <h4>Is the extracted data incorrect?</h4>
 
-          <p>You can revise your selected cells or try an alternate extraction method.</p>
+          <p>You can revise your selected cells or try an alternate extraction method.</p> -->
 
           <h5>Revise Selected Cells</h5>
           <p>Data has been extracted from the cells you selected in the previous step. You can revise your selection(s) to add or remove cells.</p>
@@ -174,8 +174,8 @@
             Stream looks for <em>whitespace</em> between columns, while Lattice looks for <em>boundary lines</em> between columns.
           </p>
 
-         <h5>Still look wrong?</h5>
-          <p><a href="http://www.github.com/tabulapdf/tabula/issues/new">Contact the developers</a> and tell us what you tried to do that didn’t work.</p>
+         <!-- <h5>Still look wrong?</h5>
+          <p><a href="http://www.github.com/tabulapdf/tabula/issues/new">Contact the developers</a> and tell us what you tried to do that didn’t work.</p> -->
       </script>
 
       <!-- TODO: abstract out commonalities of select/export page templates -->
@@ -265,27 +265,27 @@
         </div>
       </script>
 
-      <script type="text/template" id="new-version-template">
+      <!-- <script type="text/template" id="new-version-template">
         <div class="alert alert-warning alert-dismissable" id="update-alert">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <strong>New version!</strong> <a href="<%= new_release.html_url %>">Tabula <span id="new-version"><%= new_release.name %></span></a> is available (you have <span id="installed-version"><%= api_version %></span>)
         </div>
-      </script>
+      </script> -->
 
-      <script type="text/template" id="notification-template">
+      <!-- <script type="text/template" id="notification-template">
         <div class="alert alert-warning alert-dismissable" id="custom-alert">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <strong><%= notification.name %></strong> <span class="custom-alert-body"><%= notification.body %></span>
         </div>
-      </script>
+      </script> -->
 
 
       <script type="text/template" id="uploader-template">
         <div class="container">
           <div class="jumbotron">
 
-            <div id="new-version-alert"></div>
-            <div id="notification-alert"></div>
+            <!-- <div id="new-version-alert"></div>
+            <div id="notification-alert"></div> -->
 
             <div id="upload-form-container">
               <h4>Import one or more PDFs</h4>
@@ -334,7 +334,7 @@
               </div>
 
           <hr />
-          <p style="text-size: small;">If you have several PDFs with the same layout, you can select the appropriate regions once, then save the selections as a Tabula Template from the Select Tables page. If someone has shared a template with you, you can upload it to Tabula at the <a href="/mytemplates">My Templates page</a>.</p>
+          <!-- <p style="text-size: small;">If you have several PDFs with the same layout, you can select the appropriate regions once, then save the selections as a Tabula Template from the Select Tables page. If someone has shared a template with you, you can upload it to Tabula at the <a href="/mytemplates">My Templates page</a>.</p> -->
 
           </div> <!-- /jumbotron -->
         </div> <!-- /container -->
@@ -384,6 +384,7 @@
         </div>
       </script>
 
+      <!-- 
       <script type="text/template" id="about-template">
         <div class="container">
           <div class="jumbotron about">
@@ -402,12 +403,14 @@
             <p>And researchers of all kinds use Tabula to turn PDF reports into Excel spreadsheets, CSVs, and JSON files for use in analysis and database applications.</p>
 
             <h2>Credits</h2>
-            <p>Tabula was created by <a href="https://jazzido.com/" target="_blank">Manuel Aristarán</a>, <a href="https://mike.tig.as/" target="_blank">Mike Tigas</a> and <a href="http://jeremybmerrill.com/" target="_blank">Jeremy B. Merrill</a> with the support of <a href="https://www.propublica.org">ProPublica</a>, <a href="http://blogs.lanacion.com.ar/data/">La Nación DATA</a>, <a href="https://opennews.org/">Knight-Mozilla OpenNews</a>, <a href="http://www.nytimes.com">The New York Times</a>, <a href="http://knightlab.northwestern.edu/">Northwestern University Knight Lab</a>, <a href="http://www.knightfoundation.org/">The Knight Foundation</a>, and <a href="https://shuttleworthfoundation.org/">The Shuttleworth Foundation</a>. Tabula was designed by <a href="http://jasondas.com">Jason Das.</a></p>
-          </div> <!-- /jumbotron -->
-        </div> <!-- /container -->
+            <p>Tabula was created by <a href="https://jazzido.com/" target="_blank">Manuel Aristarán</a>, <a href="https://mike.tig.as/" target="_blank">Mike Tigas</a> and <a href="http://jeremybmerrill.com/" target="_blank">Jeremy B. Merrill</a> with the support of <a href="https://www.propublica.org">ProPublica</a>, <a href="http://blogs.lanacion.com.ar/data/">La Nación DATA</a>, <a href="https://opennews.org/">Knight-Mozilla OpenNews</a>, <a href="http://www.nytimes.com">The New York Times</a>, <a href="http://knightlab.northwestern.edu/">Northwestern University Knight Lab</a>, <a href="http://www.knightfoundation.org/">The Knight Foundation</a>, and <a href="https://shuttleworthfoundation.org/">The Shuttleworth Foundation</a>. Tabula was designed by <a href="http://jasondas.com">Jason Das.</a></p> 
+          </div> 
+        </div> 
        </script>
+        -->
 
-      <script type="text/templates" id="templates-template">
+      <!-- 
+        <script type="text/templates" id="templates-template">
         <div class="container">
           <div class="jumbotron help">
             <h1>My Saved Templates</h1>
@@ -438,7 +441,11 @@
               <form id="uploadtemplate" action="templates/upload.json" method="post" enctype="multipart/form-data" class="form-inline">
 
                 <div class="input-group">
+    -->
+
                   <!-- we are using this here: http://www.abeautifulsite.net/whipping-file-inputs-into-shape-with-bootstrap-3/ -->
+      <!-- 
+
                   <span class="input-group-btn">
                       <span class="btn btn-primary btn-file">
                           Browse&hellip; <input type="file" id="file" name="files[]" multiple accept="application/json">
@@ -446,22 +453,28 @@
                   </span>
                   <input type="text" class="form-control" readonly>
                 </div>
+    -->
 
                 <!-- fix for the fact that IE11 is trash https://blog.yorkxin.org/posts/2014/02/06/ajax-with-formdata-is-broken-on-ie10-ie11/ -->
+      <!-- 
+
                 <input type="hidden" name="_dontcare">
 
                 <button type="submit" class="btn btn-default">Import</button>
               </form>
 
             </div>
-          </div> <!-- /jumbotron -->
-        </div> <!-- /container -->
+    -->
+    <!-- 
+          </div>
+        </div> 
         <nestedscript type="text/javascript" src="js/vendor/upload-group.js"></nestedscript>
         <nestedscript type="text/javascript" src="js/vendor/jquery.tablesorter.min.js"></nestedscript>
-      </script>
+      </script> 
+    -->
 
 
-      <script type="text/template" id="help-template">
+      <!-- <script type="text/template" id="help-template">
         <div class="container">
           <div class="jumbotron help">
           <h3 name="howto">How to Use Tabula</h3>
@@ -481,12 +494,12 @@
           <li><strong>Some columns of my table are combined. And the headers aren't the problem! What <em>else</em> can I do?</strong> Tabula has two extraction methods. It tries to guess which one is right for document, but it's wrong sometimes. Try selecting the other (of "stream" and "lattice"), on the left in extraction mode, to see if that fixes the problem.</li>
           <li><strong>Tabula helps, but my extracted data isn't in the layout I want! How can I fix <em>that</em>?</strong> Tabula tries to recreate the table structure of the original document. You can think of Tabula as a data <em>extraction</em> tool rather than a data <em>transformation</em> tool. If you want to clean and transform your exported CSV or TSV, tools such as <a href="http://openrefine.org/">OpenRefine</a> or a spreadsheet program might be a good place to start.</li>
           <li><strong>Tabula's taking too long!</strong> Sorry! Tabula has to do a lot of weird math to reconstruct your table. Tabula's command-line counterpart, <a href="https://www.github.com/tabulapdf/tabula-extractor">tabula-extractor</a> is faster, but a little harder to use. You might give it a try.</li>
-          <!-- li><strong>I had some other problem!</strong> Sorry! You can <a href="https://www.github.com/tabulapdf/tabula/issues/new">report it to us here</a>. Be sure to include your PDF, either as a link or attached to the issue -- or email it to <a href="about">one of the Tabula creators.</a> </li -->
           </ol>
 
-          </div> <!-- /jumbotron -->
-        </div> <!-- /container -->
-       </script>
+          </div>
+        </div> 
+       </script> -->
+
        <script type="text/template" id="notifications-approval-template">
           <div id="notifications-approval-clicky">
             Tabula can check for new versions and notifications from the developers and tell you about them. We count these requests to get a rough estimate of how many times Tabula is used per day (instead of Google Analytics). We never receive any information about what PDFs you extract with Tabula.

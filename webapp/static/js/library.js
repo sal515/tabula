@@ -159,24 +159,24 @@ Tabula.Library = Backbone.View.extend({
       this.listenTo(this.files_collection, 'add', this.renderFileLibrary);
       this.uploads_collection = new Tabula.FileUploadsCollection([]);
 
-      this.listenTo(Tabula.notification, 'change', this.renderNotification);
-      this.listenTo(Tabula.new_version, 'change', this.renderVersion);
+      // this.listenTo(Tabula.notification, 'change', this.renderNotification);
+      // this.listenTo(Tabula.new_version, 'change', this.renderVersion);
     },
-    renderNotification: function(){
-      if(_.isEmpty(Tabula.notification.attributes)) return;
-      $('#notification-alert').html(_.template($('#notification-template').html().replace(/nestedscript/g, 'script'))({
-        notification: Tabula.notification.attributes,
-        api_version: Tabula.api_version
-      })).show();
-    },
-    renderVersion: function(){
-      if(_.isEmpty(Tabula.new_version.attributes)) return;
-      console.log('render new version');
-      $('#new-version-alert').html(_.template($('#new-version-template').html().replace(/nestedscript/g, 'script'))({
-        new_release: Tabula.new_version.attributes,
-        api_version: Tabula.api_version
-      })).show();
-    },
+    // renderNotification: function(){
+    //   if(_.isEmpty(Tabula.notification.attributes)) return;
+    //   $('#notification-alert').html(_.template($('#notification-template').html().replace(/nestedscript/g, 'script'))({
+    //     notification: Tabula.notification.attributes,
+    //     api_version: Tabula.api_version
+    //   })).show();
+    // },
+    // renderVersion: function(){
+    //   if(_.isEmpty(Tabula.new_version.attributes)) return;
+    //   console.log('render new version');
+    //   $('#new-version-alert').html(_.template($('#new-version-template').html().replace(/nestedscript/g, 'script'))({
+    //     new_release: Tabula.new_version.attributes,
+    //     api_version: Tabula.api_version
+    //   })).show();
+    // },
     uploadPDF: function(e){
       $(e.currentTarget).find('button').attr('disabled', 'disabled');
       this.progress_bars = new Tabula.ProgressBars({el: '#progress-container', uploads_collection: this.uploads_collection });
@@ -273,7 +273,7 @@ Tabula.Library = Backbone.View.extend({
         $('#library-container').hide();
         $('#library-container').
           after(_.template( $('#help-template').html().replace(/nestedscript/g, 'script') )({})).
-          after('<h1>First time using Tabula? Welcome!</h1>');
+          after('<h1>First time using Tabula? Welcome! </h1>');
         $('.jumbotron.help').css('padding-top', '10px');
       }
     },
@@ -285,8 +285,8 @@ Tabula.Library = Backbone.View.extend({
         importing: false
       }) );
       this.renderFileLibrary();
-      this.renderNotification();
-      this.renderVersion();
+      // this.renderNotification();
+      // this.renderVersion();
       return this;
     }
 });
